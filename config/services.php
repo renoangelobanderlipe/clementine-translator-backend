@@ -35,5 +35,9 @@ return [
       'key' => env('RAPID_API_KEY'), 
       'host' => env('RAPID_API_HOST'), 
       'domain' => env('RAPID_API_DOMAIN'), 
+      'headers' => [
+        'X-RapidAPI-Host' => env('RAPID_API_HOST'),
+        'X-RapidAPI-Key' => env('RAPID_API_KEY'),
+      ],
     ]
 ];
