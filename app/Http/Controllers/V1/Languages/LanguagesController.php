@@ -15,7 +15,6 @@ class LanguagesController extends Controller
   {
     try {
       $languages = (new LanguagesModel)
-        ->prepare()
         ->list();
 
       return $this->responseData($languages);

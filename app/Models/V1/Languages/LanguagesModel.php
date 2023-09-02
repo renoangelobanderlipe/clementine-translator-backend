@@ -3,40 +3,28 @@
 namespace App\Models\V1\Languages;
 
 use App\Contracts\LanguageContract;
-use App\Helpers\HttpHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class LanguagesModel extends Model implements LanguageContract
 {
+  protected $table = 'languages';
+  protected $guarded = [];
+  protected $hidden = [
+    'id',
+    'created_at',
+    'updated_at'
+  ];
+
   protected $response;
   protected $languagesModel;
 
-  /**
-   * Set of languages return by the Http Helper
-   *
-   * @return void
-   */
-  public function prepare()
+  public function scopeLanguages()
   {
-    $this->response = (new HttpHelper)
-      ->domain(config('services.rapidapi.domain'))
-      ->key(config('services.rapidapi.key'))
-      ->endpoint(config('constants.api_endpoint.getLanguage'))
-      ->headers(config('services.rapidapi.headers'))
-      ->getWithOptions();
-
-    return $this;
+    return self::all();
   }
 
-  /**
-   * Data Model of Languages
-   *
-   * @return void
-   */
-  public function list()
+  public function list(): array
   {
-    return $this->response
-      ->data
-      ->languages;
+    return self::languages()->toArray();
   }
 }
