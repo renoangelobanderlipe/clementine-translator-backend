@@ -38,18 +38,15 @@ class TranslatorModel extends Model implements TranslatorContract
   public function formParams(): array
   {
     return [
-      'source_language' => $this->sourceLanguage,
-      'target_language' => $this->targetLanguage,
-      'text' => $this->body
+      'source' => $this->sourceLanguage,
+      'target' => $this->targetLanguage,
+      'q' => $this->body
     ];
   }
 
   public function headers(): array
   {
-    return [
-      ...config('services.rapidapi.headers'),
-      ...config('constants.headers')
-    ];
+    return config('services.google_translate.headers_post');
   }
 
   public function prepare()
@@ -57,7 +54,6 @@ class TranslatorModel extends Model implements TranslatorContract
     $this->response = (new HttpHelper)
       ->domain(config('services.rapidapi.domain'))
       ->key(config('services.rapidapi.key'))
-      ->endpoint(config('constants.api_endpoint.translate'))
       ->headers(self::headers())
       ->body(self::formParams() ?? [])
       ->post();
@@ -67,6 +63,6 @@ class TranslatorModel extends Model implements TranslatorContract
 
   public function translated()
   {
-    return (array)$this->response->data;
+    return (array)$this->response->data->translations;
   }
 }
